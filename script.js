@@ -454,7 +454,7 @@ function renderClientChart() {
   submitChart('chartClient', 'bar', {
     labels: data.labels,
     datasets: [{ label: 'Diligencias', data: data.values, backgroundColor: '#3b82f6' }]
-  }, { indexAxis: 'x' });
+  }, { indexAxis: 'y', scales: { x: { beginAtZero: true, ticks: { precision: 0 } }, y: { ticks: { autoSkip: false } } } });
 }
 
 function renderDriverChart() {
@@ -462,7 +462,7 @@ function renderDriverChart() {
   submitChart('chartDriver', 'bar', {
     labels: data.labels,
     datasets: [{ label: 'Diligencias', data: data.values, backgroundColor: '#2563eb' }]
-  }, { indexAxis: 'y' });
+  }, { indexAxis: 'y', scales: { x: { beginAtZero: true, ticks: { precision: 0 } }, y: { ticks: { autoSkip: false } } } });
 }
 
 function renderCityChart() {
@@ -470,7 +470,7 @@ function renderCityChart() {
   submitChart('chartCity', 'bar', {
     labels: data.labels,
     datasets: [{ label: 'Diligencias', data: data.values, backgroundColor: '#60a5fa' }]
-  }, { indexAxis: 'x' });
+  }, { indexAxis: 'y', scales: { x: { beginAtZero: true, ticks: { precision: 0 } }, y: { ticks: { autoSkip: false } } } });
 }
 
 function renderAreaChart() {
