@@ -123,23 +123,19 @@ function attachEvents() {
 }
 
 function switchModule(moduleId) {
-  // Ocultar todos los módulos
   document.querySelectorAll('.module-container').forEach((container) => {
     container.classList.remove('active');
   });
 
-  // Desactivar todos los botones
   document.querySelectorAll('.module-btn').forEach((btn) => {
     btn.classList.remove('active');
   });
 
-  // Mostrar módulo seleccionado
   const selectedModule = document.getElementById(`modulo-${moduleId}`);
   if (selectedModule) {
     selectedModule.classList.add('active');
   }
 
-  // Activar botón seleccionado
   const selectedBtn = document.querySelector(`[data-module="${moduleId}"]`);
   if (selectedBtn) {
     selectedBtn.classList.add('active');
@@ -249,7 +245,6 @@ function normalizeRecord(raw) {
   record.servicio = record['tipo de servicio'] || record.servicio || record.service || '';
   record.estado = record.estado || record.status || '';
   record.observaciones = record.observaciones || record.observation || record.notes || '';
-
   record.hora = record.hora || record.time || '';
   record.duracion = parseDuration(record['tiempo gestion'] || record['tiempo de gestión'] || record.duracion || record.duration || '');
   record.key = `${record.fecha}-${record.cliente}-${record.conductor}-${Math.random().toString(36).slice(2, 8)}`;
