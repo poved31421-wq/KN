@@ -24,10 +24,10 @@
         </div>
       </div>
       <nav class="sidebar-nav">
-        <a class="nav-link active" href="#resumen">Resumen</a>
-        <a class="nav-link" href="#graficos">Visualizaciones</a>
-        <a class="nav-link" href="#insights">Insights</a>
-        <a class="nav-link" href="#tabla">Tabla</a>
+        <a class="nav-link active" href="#modulo-resumen" onclick="switchModule('resumen'); return false;">Resumen</a>
+        <a class="nav-link" href="#modulo-analisis" onclick="switchModule('analisis'); return false;">Análisis</a>
+        <a class="nav-link" href="#modulo-operativo" onclick="switchModule('operativo'); return false;">Operativo</a>
+        <a class="nav-link" href="#modulo-reportes" onclick="switchModule('reportes'); return false;">Reportes</a>
       </nav>
       <div class="sidebar-footer">
         <p>Conexión en vivo</p>
@@ -50,10 +50,11 @@
         </div>
       </header>
 
-      <section class="content-panel" id="resumen">
+      <!-- FILTROS GLOBALES -->
+      <section class="content-panel" id="filtrosGlobales">
         <div class="panel-head">
           <h2>Filtros dinámicos</h2>
-          <p>Actualiza los indicadores y gráficos con todos los criterios disponibles.</p>
+          <p>Aplica filtros globales que afectan todos los módulos en tiempo real.</p>
         </div>
         <div class="filter-grid">
           <div class="field-group">
@@ -99,124 +100,197 @@
         </div>
       </section>
 
-      <section class="kpi-grid">
-        <article class="kpi-card">
-          <div class="kpi-header"><span class="kpi-icon">📦</span><span>Total de diligencias</span></div>
-          <h3 id="kpiTotal">0</h3>
-          <p class="kpi-meta"><span id="kpiTotalDelta">0%</span> vs periodo anterior</p>
-        </article>
-        <article class="kpi-card">
-          <div class="kpi-header"><span class="kpi-icon">✅</span><span>Diligencias finalizadas</span></div>
-          <h3 id="kpiCompleted">0</h3>
-          <p class="kpi-meta"><span id="kpiCompletedDelta">0%</span> terminadas</p>
-        </article>
-        <article class="kpi-card">
-          <div class="kpi-header"><span class="kpi-icon">⏳</span><span>Diligencias pendientes</span></div>
-          <h3 id="kpiPending">0</h3>
-          <p class="kpi-meta"><span id="kpiPendingDelta">0%</span> abiertas</p>
-        </article>
-        <article class="kpi-card">
-          <div class="kpi-header"><span class="kpi-icon">🚫</span><span>Diligencias canceladas</span></div>
-          <h3 id="kpiCancelled">0</h3>
-          <p class="kpi-meta"><span id="kpiCancelledDelta">0%</span> canceladas</p>
-        </article>
-        <article class="kpi-card">
-          <div class="kpi-header"><span class="kpi-icon">🤝</span><span>Clientes atendidos</span></div>
-          <h3 id="kpiClients">0</h3>
-          <p class="kpi-meta"><span id="kpiClientsDelta">0%</span> clientes únicos</p>
-        </article>
-        <article class="kpi-card">
-          <div class="kpi-header"><span class="kpi-icon">🚗</span><span>Conductores activos</span></div>
-          <h3 id="kpiDrivers">0</h3>
-          <p class="kpi-meta"><span id="kpiDriversDelta">0%</span> conductores</p>
-        </article>
-        <article class="kpi-card">
-          <div class="kpi-header"><span class="kpi-icon">🌆</span><span>Ciudades cubiertas</span></div>
-          <h3 id="kpiCities">0</h3>
-          <p class="kpi-meta"><span id="kpiCitiesDelta">0%</span> localidades</p>
-        </article>
-        <article class="kpi-card">
-          <div class="kpi-header"><span class="kpi-icon">⏱️</span><span>Tiempo promedio</span></div>
-          <h3 id="kpiAvgTime">0 min</h3>
-          <p class="kpi-meta"><span id="kpiCompliance">0%</span> cumplimiento</p>
-        </article>
+      <!-- NAVEGACIÓN DE MÓDULOS -->
+      <div class="modules-nav">
+        <button class="module-btn active" data-module="resumen">1. Resumen Ejecutivo</button>
+        <button class="module-btn" data-module="analisis">2. Análisis</button>
+        <button class="module-btn" data-module="operativo">3. Operativo</button>
+        <button class="module-btn" data-module="reportes">4. Reportes</button>
+      </div>
+
+      <!-- MÓDULO 1: RESUMEN EJECUTIVO -->
+      <section class="module-container active" id="modulo-resumen">
+        <div class="module-header">
+          <h2>Resumen Ejecutivo</h2>
+          <p>Indicadores clave de desempeño e insights principales.</p>
+        </div>
+        <section class="kpi-grid">
+          <article class="kpi-card">
+            <div class="kpi-header"><span class="kpi-icon">📦</span><span>Total de diligencias</span></div>
+            <h3 id="kpiTotal">0</h3>
+            <p class="kpi-meta"><span id="kpiTotalDelta">0%</span> vs periodo anterior</p>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-header"><span class="kpi-icon">✅</span><span>Finalizadas</span></div>
+            <h3 id="kpiCompleted">0</h3>
+            <p class="kpi-meta"><span id="kpiCompletedDelta">0%</span> completadas</p>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-header"><span class="kpi-icon">⏳</span><span>Pendientes</span></div>
+            <h3 id="kpiPending">0</h3>
+            <p class="kpi-meta"><span id="kpiPendingDelta">0%</span> abiertas</p>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-header"><span class="kpi-icon">🚫</span><span>Canceladas</span></div>
+            <h3 id="kpiCancelled">0</h3>
+            <p class="kpi-meta"><span id="kpiCancelledDelta">0%</span> canceladas</p>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-header"><span class="kpi-icon">🤝</span><span>Clientes</span></div>
+            <h3 id="kpiClients">0</h3>
+            <p class="kpi-meta"><span id="kpiClientsDelta">0%</span> únicos</p>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-header"><span class="kpi-icon">🚗</span><span>Conductores</span></div>
+            <h3 id="kpiDrivers">0</h3>
+            <p class="kpi-meta"><span id="kpiDriversDelta">0%</span> activos</p>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-header"><span class="kpi-icon">🌆</span><span>Ciudades</span></div>
+            <h3 id="kpiCities">0</h3>
+            <p class="kpi-meta"><span id="kpiCitiesDelta">0%</span> cubiertas</p>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-header"><span class="kpi-icon">⏱️</span><span>Cumplimiento</span></div>
+            <h3 id="kpiCompliance">0%</h3>
+            <p class="kpi-meta"><span id="kpiAvgTime">0 min</span> promedio</p>
+          </article>
+        </section>
+        <section class="content-panel" style="margin-top: 24px;">
+          <div class="panel-head">
+            <h3>Hallazgos principales</h3>
+          </div>
+          <div class="insights-grid" id="insightsList"></div>
+        </section>
       </section>
 
-      <section class="charts-panel" id="graficos">
-        <div class="chart-card">
-          <div class="chart-head"><h3>Diligencias por Cliente</h3></div>
-          <canvas id="chartClient"></canvas>
+      <!-- MÓDULO 2: ANÁLISIS -->
+      <section class="module-container" id="modulo-analisis">
+        <div class="module-header">
+          <h2>Análisis</h2>
+          <p>Visualizaciones y distribuciones de operaciones.</p>
         </div>
-        <div class="chart-card">
-          <div class="chart-head"><h3>Diligencias por Conductor</h3></div>
-          <canvas id="chartDriver"></canvas>
+        <section class="charts-panel">
+          <div class="chart-card">
+            <div class="chart-head"><h3>Diligencias por Cliente</h3></div>
+            <canvas id="chartClient"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-head"><h3>Diligencias por Conductor</h3></div>
+            <canvas id="chartDriver"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-head"><h3>Diligencias por Ciudad</h3></div>
+            <canvas id="chartCity"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-head"><h3>Diligencias por Área Solicitante</h3></div>
+            <canvas id="chartArea"></canvas>
+          </div>
+          <div class="chart-card wide-card">
+            <div class="chart-head"><h3>Diligencias por Quien Remite (Apiladas)</h3></div>
+            <canvas id="chartRemite"></canvas>
+          </div>
+          <div class="chart-card wide-card">
+            <div class="chart-head"><h3>Evolución de diligencias</h3>
+              <div class="period-switch">
+                <button class="period-btn active" data-period="day">Día</button>
+                <button class="period-btn" data-period="week">Semana</button>
+                <button class="period-btn" data-period="month">Mes</button>
+              </div>
+            </div>
+            <canvas id="chartTrend"></canvas>
+          </div>
+        </section>
+      </section>
+
+      <!-- MÓDULO 3: OPERATIVO -->
+      <section class="module-container" id="modulo-operativo">
+        <div class="module-header">
+          <h2>Operativo</h2>
+          <p>Tabla detallada y rankings de desempeño.</p>
         </div>
-        <div class="chart-card">
-          <div class="chart-head"><h3>Diligencias por Ciudad</h3></div>
-          <canvas id="chartCity"></canvas>
+        <section class="top-panel">
+          <div class="top-list">
+            <h3>Top 10 Clientes</h3>
+            <ol id="topClients"></ol>
+          </div>
+          <div class="top-list">
+            <h3>Top 10 Conductores</h3>
+            <ol id="topDrivers"></ol>
+          </div>
+        </section>
+        <section class="content-panel" style="margin-top: 24px;">
+          <div class="panel-head">
+            <h2>Tabla detallada de registros</h2>
+            <p>Busca, ordena y visualiza todos los registros operativos.</p>
+          </div>
+          <div class="table-wrapper">
+            <table id="dataTable">
+              <thead>
+                <tr>
+                  <th data-key="fecha">Fecha</th>
+                  <th data-key="cliente">Cliente</th>
+                  <th data-key="conductor">Conductor</th>
+                  <th data-key="ciudad">Ciudad</th>
+                  <th data-key="area">Área solicitante</th>
+                  <th data-key="remite">Quien remite</th>
+                  <th data-key="servicio">Tipo de servicio</th>
+                  <th data-key="estado">Estado</th>
+                  <th data-key="observaciones">Observaciones</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <!-- MÓDULO 4: REPORTES -->
+      <section class="module-container" id="modulo-reportes">
+        <div class="module-header">
+          <h2>Reportes y Exportación</h2>
+          <p>Descarga y comparte datos en múltiples formatos.</p>
         </div>
-        <div class="chart-card">
-          <div class="chart-head"><h3>Diligencias por Área Solicitante</h3></div>
-          <canvas id="chartArea"></canvas>
-        </div>
-        <div class="chart-card wide-card">
-          <div class="chart-head"><h3>Diligencias por Quien Remite</h3></div>
-          <canvas id="chartRemite"></canvas>
-        </div>
-        <div class="chart-card wide-card">
-          <div class="chart-head"><h3>Evolución de diligencias</h3>
-            <div class="period-switch">
-              <button class="period-btn active" data-period="day">Día</button>
-              <button class="period-btn" data-period="week">Semana</button>
-              <button class="period-btn" data-period="month">Mes</button>
+        <section class="content-panel">
+          <div class="panel-head">
+            <h3>Opciones de exportación</h3>
+            <p>Descarga los datos filtrados en tu formato preferido.</p>
+          </div>
+          <div class="export-grid">
+            <div class="export-card">
+              <h4>📊 Excel</h4>
+              <p>Importable en Office, Sheets, y herramientas BI.</p>
+              <button id="exportExcelBtn2" class="export-btn">Descargar XLSX</button>
+            </div>
+            <div class="export-card">
+              <h4>📋 CSV</h4>
+              <p>Formato universal, compatible con bases de datos.</p>
+              <button id="exportCsvBtn2" class="export-btn">Descargar CSV</button>
+            </div>
+            <div class="export-card">
+              <h4>📄 PDF</h4>
+              <p>Reporte visual para imprimir y compartir.</p>
+              <button id="exportPdfBtn2" class="export-btn">Descargar PDF</button>
+            </div>
+            <div class="export-card">
+              <h4>🖼️ PNG</h4>
+              <p>Captura visual para presentaciones.</p>
+              <button id="exportPngBtn2" class="export-btn">Descargar PNG</button>
             </div>
           </div>
-          <canvas id="chartTrend"></canvas>
-        </div>
-      </section>
-
-      <section class="top-panel">
-        <div class="top-list">
-          <h3>Top 10 Clientes</h3>
-          <ol id="topClients"></ol>
-        </div>
-        <div class="top-list">
-          <h3>Top 10 Conductores</h3>
-          <ol id="topDrivers"></ol>
-        </div>
-      </section>
-
-      <section class="content-panel" id="insights">
-        <div class="panel-head">
-          <h2>Panel de insights</h2>
-          <p>Hallazgos automáticos y alertas operativas.</p>
-        </div>
-        <div class="insights-grid" id="insightsList"></div>
-      </section>
-
-      <section class="content-panel" id="tabla">
-        <div class="panel-head">
-          <h2>Tabla detallada</h2>
-          <p>Registros operativos con búsqueda, orden y exportación.</p>
-        </div>
-        <div class="table-wrapper">
-          <table id="dataTable">
-            <thead>
-              <tr>
-                <th data-key="fecha">Fecha</th>
-                <th data-key="cliente">Cliente</th>
-                <th data-key="conductor">Conductor</th>
-                <th data-key="ciudad">Ciudad</th>
-                <th data-key="area">Área solicitante</th>
-                <th data-key="remite">Quien remite</th>
-                <th data-key="servicio">Tipo de servicio</th>
-                <th data-key="estado">Estado</th>
-                <th data-key="observaciones">Observaciones</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
+        </section>
+        <section class="content-panel" style="margin-top: 24px;">
+          <div class="panel-head">
+            <h3>Información de conexión</h3>
+          </div>
+          <div class="info-box">
+            <p><strong>Fuente de datos:</strong> Google Sheets (publicado en CSV)</p>
+            <p><strong>Estado:</strong> <span id="statusDot2" class="status-dot online"></span> Conexión activa</p>
+            <p><strong>Última actualización:</strong> Al refrescar (F5) o cambiar filtros</p>
+            <p><strong>Repositorio:</strong> <a href="https://github.com/poved31421-wq/KN" target="_blank">GitHub</a></p>
+          </div>
+        </section>
       </section>
     </main>
   </div>

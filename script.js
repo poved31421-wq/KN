@@ -77,10 +77,26 @@ function attachEvents() {
   });
 
   controls.searchText.addEventListener('input', handleFilters);
+  
+  // Exportación (arriba)
   controls.exportCsvBtn.addEventListener('click', exportCsv);
   controls.exportExcelBtn.addEventListener('click', exportExcel);
   controls.exportPdfBtn.addEventListener('click', exportPdf);
   controls.exportPngBtn.addEventListener('click', exportPng);
+
+  // Exportación (módulo reportes)
+  document.getElementById('exportExcelBtn2')?.addEventListener('click', exportExcel);
+  document.getElementById('exportCsvBtn2')?.addEventListener('click', exportCsv);
+  document.getElementById('exportPdfBtn2')?.addEventListener('click', exportPdf);
+  document.getElementById('exportPngBtn2')?.addEventListener('click', exportPng);
+
+  // Navegación de módulos
+  document.querySelectorAll('.module-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const moduleId = btn.dataset.module;
+      switchModule(moduleId);
+    });
+  });
 
   controls.periodButtons.forEach((button) => {
     button.addEventListener('click', () => {
@@ -106,10 +122,39 @@ function attachEvents() {
   });
 }
 
+function switchModule(moduleId) {
+  // Ocultar todos los módulos
+  document.querySelectorAll('.module-container').forEach((container) => {
+    container.classList.remove('active');
+  });
+
+  // Desactivar todos los botones
+  document.querySelectorAll('.module-btn').forEach((btn) => {
+    btn.classList.remove('active');
+  });
+
+  // Mostrar módulo seleccionado
+  const selectedModule = document.getElementById(`modulo-${moduleId}`);
+  if (selectedModule) {
+    selectedModule.classList.add('active');
+  }
+
+  // Activar botón seleccionado
+  const selectedBtn = document.querySelector(`[data-module="${moduleId}"]`);
+  if (selectedBtn) {
+    selectedBtn.classList.add('active');
+  }
+}
+
 async function loadData() {
   if (IS_FILE_PROTOCOL) {
     statusDot.classList.remove('online');
     statusDot.classList.add('offline');
+    const statusDot2 = document.getElementById('statusDot2');
+    if (statusDot2) {
+      statusDot2.classList.remove('online');
+      statusDot2.classList.add('offline');
+    }
     alert('Abra este archivo desde un servidor local o remoto (http:// o https://). El protocolo file:// no permite cargar datos externos por seguridad.');
     return;
   }
@@ -124,11 +169,21 @@ async function loadData() {
     state.filtered = [...state.records];
     statusDot.classList.remove('offline');
     statusDot.classList.add('online');
+    const statusDot2 = document.getElementById('statusDot2');
+    if (statusDot2) {
+      statusDot2.classList.remove('offline');
+      statusDot2.classList.add('online');
+    }
     populateFilters();
     handleFilters();
   } catch (error) {
     statusDot.classList.remove('online');
     statusDot.classList.add('offline');
+    const statusDot2 = document.getElementById('statusDot2');
+    if (statusDot2) {
+      statusDot2.classList.remove('online');
+      statusDot2.classList.add('offline');
+    }
     console.error(error);
     alert(`Error cargando datos. Verifique la conexión o la disponibilidad de la hoja de Google Sheets. Detalle: ${error.message}`);
   }
