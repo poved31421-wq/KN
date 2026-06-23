@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Operativo | Diligencias</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" integrity="sha512-mri/ruKmlkQJsit3azPx2X96f3AKi2K+flKUUaPn3nWcJ+5xSVMaYgLSqsoe34lvsu0w0mQ4J5NSXnVbD4iUMA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-j8Q5VF4zHqppbx+cr6wyzJPCid2lX5EO0RAxAb0nVhZU6Ndv0jIg1zITGhwCFAUOubYL75rRJya0u4d6qHlGcw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNa5IW8qnfqDnUL7Lz1Fvlduvq27X5S1CVEFD4x6S/qr7Ws+IVGHmR4/S+n9/kMlRUi6UBPq2xUjbMmSqbS00A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="app-sidebar">
+      <div class="brand">
+        <div class="brand-icon">DO</div>
+        <div>
+          <p class="brand-label">Dashboard</p>
+          <p class="brand-subtitle">Operativo</p>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="nav-link active" href="#resumen">Resumen</a>
+        <a class="nav-link" href="#graficos">Visualizaciones</a>
+        <a class="nav-link" href="#insights">Insights</a>
+        <a class="nav-link" href="#tabla">Tabla</a>
+      </nav>
+      <div class="sidebar-footer">
+        <p>Conexión en vivo</p>
+        <span id="statusDot" class="status-dot online"></span>
+      </div>
+    </aside>
+
+    <main class="app-main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Centro Ejecutivo</p>
+          <h1>Seguimiento de diligencias</h1>
+          <p class="subtitle">Visión operativa diaria, semanal, mensual y anual.</p>
+        </div>
+        <div class="top-actions">
+          <button id="exportExcelBtn" class="action-btn">Exportar Excel</button>
+          <button id="exportCsvBtn" class="action-btn outline">Exportar CSV</button>
+          <button id="exportPdfBtn" class="action-btn">Exportar PDF</button>
+          <button id="exportPngBtn" class="action-btn outline">Exportar PNG</button>
+        </div>
+      </header>
+
+      <section class="content-panel" id="resumen">
+        <div class="panel-head">
+          <h2>Filtros dinámicos</h2>
+          <p>Actualiza los indicadores y gráficos con todos los criterios disponibles.</p>
+        </div>
+        <div class="filter-grid">
+          <div class="field-group">
+            <label for="dateFrom">Fecha inicial</label>
+            <input type="date" id="dateFrom" />
+          </div>
+          <div class="field-group">
+            <label for="dateTo">Fecha final</label>
+            <input type="date" id="dateTo" />
+          </div>
+          <div class="field-group">
+            <label for="filterClient">Cliente</label>
+            <select id="filterClient"><option value="">Todos</option></select>
+          </div>
+          <div class="field-group">
+            <label for="filterDriver">Conductor</label>
+            <select id="filterDriver"><option value="">Todos</option></select>
+          </div>
+          <div class="field-group">
+            <label for="filterCity">Ciudad</label>
+            <select id="filterCity"><option value="">Todas</option></select>
+          </div>
+          <div class="field-group">
+            <label for="filterArea">Área solicitante</label>
+            <select id="filterArea"><option value="">Todas</option></select>
+          </div>
+          <div class="field-group">
+            <label for="filterRemite">Quien remite</label>
+            <select id="filterRemite"><option value="">Todos</option></select>
+          </div>
+          <div class="field-group">
+            <label for="filterService">Tipo de servicio</label>
+            <select id="filterService"><option value="">Todos</option></select>
+          </div>
+          <div class="field-group">
+            <label for="filterStatus">Estado</label>
+            <select id="filterStatus"><option value="">Todos</option></select>
+          </div>
+          <div class="field-group full-width">
+            <label for="searchText">Buscar registros</label>
+            <input type="text" id="searchText" placeholder="Buscar por cliente, conductor, ciudad, observaciones..." />
+          </div>
+        </div>
+      </section>
+
+      <section class="kpi-grid">
+        <article class="kpi-card">
+          <div class="kpi-header"><span class="kpi-icon">📦</span><span>Total de diligencias</span></div>
+          <h3 id="kpiTotal">0</h3>
+          <p class="kpi-meta"><span id="kpiTotalDelta">0%</span> vs periodo anterior</p>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-header"><span class="kpi-icon">✅</span><span>Diligencias finalizadas</span></div>
+          <h3 id="kpiCompleted">0</h3>
+          <p class="kpi-meta"><span id="kpiCompletedDelta">0%</span> terminadas</p>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-header"><span class="kpi-icon">⏳</span><span>Diligencias pendientes</span></div>
+          <h3 id="kpiPending">0</h3>
+          <p class="kpi-meta"><span id="kpiPendingDelta">0%</span> abiertas</p>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-header"><span class="kpi-icon">🚫</span><span>Diligencias canceladas</span></div>
+          <h3 id="kpiCancelled">0</h3>
+          <p class="kpi-meta"><span id="kpiCancelledDelta">0%</span> canceladas</p>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-header"><span class="kpi-icon">🤝</span><span>Clientes atendidos</span></div>
+          <h3 id="kpiClients">0</h3>
+          <p class="kpi-meta"><span id="kpiClientsDelta">0%</span> clientes únicos</p>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-header"><span class="kpi-icon">🚗</span><span>Conductores activos</span></div>
+          <h3 id="kpiDrivers">0</h3>
+          <p class="kpi-meta"><span id="kpiDriversDelta">0%</span> conductores</p>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-header"><span class="kpi-icon">🌆</span><span>Ciudades cubiertas</span></div>
+          <h3 id="kpiCities">0</h3>
+          <p class="kpi-meta"><span id="kpiCitiesDelta">0%</span> localidades</p>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-header"><span class="kpi-icon">⏱️</span><span>Tiempo promedio</span></div>
+          <h3 id="kpiAvgTime">0 min</h3>
+          <p class="kpi-meta"><span id="kpiCompliance">0%</span> cumplimiento</p>
+        </article>
+      </section>
+
+      <section class="charts-panel" id="graficos">
+        <div class="chart-card">
+          <div class="chart-head"><h3>Diligencias por Cliente</h3></div>
+          <canvas id="chartClient"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-head"><h3>Diligencias por Conductor</h3></div>
+          <canvas id="chartDriver"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-head"><h3>Diligencias por Ciudad</h3></div>
+          <canvas id="chartCity"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-head"><h3>Diligencias por Área Solicitante</h3></div>
+          <canvas id="chartArea"></canvas>
+        </div>
+        <div class="chart-card wide-card">
+          <div class="chart-head"><h3>Diligencias por Quien Remite</h3></div>
+          <canvas id="chartRemite"></canvas>
+        </div>
+        <div class="chart-card wide-card">
+          <div class="chart-head"><h3>Evolución de diligencias</h3>
+            <div class="period-switch">
+              <button class="period-btn active" data-period="day">Día</button>
+              <button class="period-btn" data-period="week">Semana</button>
+              <button class="period-btn" data-period="month">Mes</button>
+            </div>
+          </div>
+          <canvas id="chartTrend"></canvas>
+        </div>
+      </section>
+
+      <section class="top-panel">
+        <div class="top-list">
+          <h3>Top 10 Clientes</h3>
+          <ol id="topClients"></ol>
+        </div>
+        <div class="top-list">
+          <h3>Top 10 Conductores</h3>
+          <ol id="topDrivers"></ol>
+        </div>
+      </section>
+
+      <section class="content-panel" id="insights">
+        <div class="panel-head">
+          <h2>Panel de insights</h2>
+          <p>Hallazgos automáticos y alertas operativas.</p>
+        </div>
+        <div class="insights-grid" id="insightsList"></div>
+      </section>
+
+      <section class="content-panel" id="tabla">
+        <div class="panel-head">
+          <h2>Tabla detallada</h2>
+          <p>Registros operativos con búsqueda, orden y exportación.</p>
+        </div>
+        <div class="table-wrapper">
+          <table id="dataTable">
+            <thead>
+              <tr>
+                <th data-key="fecha">Fecha</th>
+                <th data-key="cliente">Cliente</th>
+                <th data-key="conductor">Conductor</th>
+                <th data-key="ciudad">Ciudad</th>
+                <th data-key="area">Área solicitante</th>
+                <th data-key="remite">Quien remite</th>
+                <th data-key="servicio">Tipo de servicio</th>
+                <th data-key="estado">Estado</th>
+                <th data-key="observaciones">Observaciones</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
