@@ -404,11 +404,13 @@ a {
 .table-wrapper {
   padding: 18px;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 #dataTable {
   width: 100%;
   border-collapse: collapse;
+  min-width: 1200px;
 }
 
 #dataTable th,
@@ -416,6 +418,7 @@ a {
   text-align: left;
   padding: 14px 16px;
   border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  white-space: nowrap;
 }
 
 #dataTable th {
@@ -424,10 +427,27 @@ a {
   background: var(--surface);
   color: var(--muted);
   cursor: pointer;
+  font-weight: 600;
+  z-index: 10;
+}
+
+#dataTable thead tr {
+  background: var(--surface-alt);
+  border-bottom: 2px solid var(--border);
+}
+
+#dataTable tbody tr {
+  transition: background 0.15s ease;
 }
 
 #dataTable tbody tr:hover {
-  background: rgba(59, 130, 246, 0.04);
+  background: rgba(59, 130, 246, 0.08);
+}
+
+#dataTable td {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* MÓDULOS Y NAVEGACIÓN */
